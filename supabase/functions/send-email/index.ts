@@ -13,6 +13,7 @@ const FROM_NAME = Deno.env.get('MAILJET_FROM_NAME') || 'Site Web Goudronnage'
 const ALLOWED_ORIGINS = [
   'https://goudronnage-occitanie.fr',
   'https://www.goudronnage-occitanie.fr',
+  'https://goudronnage-occitanie.onrender.com',
   'http://localhost:5173' // Dev uniquement
 ]
 
