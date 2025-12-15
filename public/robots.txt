@@ -1,0 +1,15 @@
+# Robots.txt pour Goudronnage Occitanie
+# https://goudronnage-occitanie.fr
+
+User-agent: *
+Allow: /
+
+# Fichiers à ne pas indexer
+Disallow: /api/
+Disallow: /*.json$
+
+# Sitemap
+Sitemap: https://goudronnage-occitanie.fr/sitemap.xml
+
+# Crawl-delay (optionnel, respecté par certains bots)
+Crawl-delay: 1

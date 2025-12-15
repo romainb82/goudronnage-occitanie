@@ -6,6 +6,8 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 const MAILJET_API_KEY = Deno.env.get('MAILJET_API_KEY')
 const MAILJET_SECRET_KEY = Deno.env.get('MAILJET_SECRET_KEY')
 const RECIPIENT_EMAIL = Deno.env.get('RECIPIENT_EMAIL') || 'goudronnageoccitanie.82@gmail.com'
+const FROM_EMAIL = Deno.env.get('MAILJET_FROM_EMAIL') || 'noreply@goudronnage-occitanie.fr'
+const FROM_NAME = Deno.env.get('MAILJET_FROM_NAME') || 'Site Web Goudronnage'
 
 // ✅ FIX VULN #2 : CORS restreint au domaine autorisé
 const ALLOWED_ORIGINS = [
@@ -46,16 +48,6 @@ function isValidEmail(email: string): boolean {
   return emailRegex.test(email)
 }
 
-function normalizeString(value: unknown): string {
-  if (typeof value === 'number') return String(value)
-  if (typeof value === 'string') return value
-  return ''
-}
-
-function sanitizeInput(value: unknown): string {
-  return escapeHtml(normalizeString(value))
-}
-
 serve(async (req) => {
   const origin = req.headers.get('origin')
   const corsHeaders = getCorsHeaders(origin)
@@ -74,38 +66,24 @@ serve(async (req) => {
   }
 
   try {
-    if (!MAILJET_API_KEY || !MAILJET_SECRET_KEY) {
-      console.error('Clés Mailjet manquantes')
-      return new Response(
-        JSON.stringify({ error: 'Configuration Mailjet incomplète côté serveur' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
     const { surface, telephone, email, nom, message } = await req.json()
 
-    const surfaceValue = normalizeString(surface).trim()
-    const telephoneValue = normalizeString(telephone).trim()
-    const nomValue = normalizeString(nom).trim()
-    const emailValue = normalizeString(email).trim()
-    const messageValue = normalizeString(message).trim()
-
     // Validation renforcée
-    if (!telephoneValue) {
+    if (!telephone) {
       return new Response(
         JSON.stringify({ error: 'Le numéro de téléphone est requis' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
-    if (!isValidPhone(telephoneValue)) {
+    if (!isValidPhone(telephone)) {
       return new Response(
         JSON.stringify({ error: 'Numéro de téléphone invalide' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
-    if (emailValue && !isValidEmail(emailValue)) {
+    if (email && !isValidEmail(email)) {
       return new Response(
         JSON.stringify({ error: 'Email invalide' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -113,14 +91,11 @@ serve(async (req) => {
     }
 
     // ✅ Échapper toutes les données utilisateur avant insertion HTML
-    const safeSurface = escapeHtml(surfaceValue)
-    const safeTelephone = escapeHtml(telephoneValue)
-    const safeNom = escapeHtml(nomValue)
-    const safeEmail = escapeHtml(emailValue)
-    const safeMessage = escapeHtml(messageValue)
-    const formattedSurfaceHtml = safeSurface ? `${safeSurface} m²` : 'Non renseignée'
-    const formattedSurfaceText = surfaceValue ? `${surfaceValue} m²` : 'Non renseignée'
-    const replyToName = nomValue ? nomValue.replace(/[\r\n]+/g, ' ') : ''
+    const safeSurface = escapeHtml(surface)
+    const safeTelephone = escapeHtml(telephone)
+    const safeNom = escapeHtml(nom)
+    const safeEmail = escapeHtml(email)
+    const safeMessage = escapeHtml(message)
 
     // Construction du contenu de l'email avec données échappées
     const emailContent = `
@@ -128,7 +103,7 @@ serve(async (req) => {
       <table style="border-collapse: collapse; width: 100%;">
         <tr>
           <td style="padding: 10px; border: 1px solid #ddd;"><strong>Surface</strong></td>
-          <td style="padding: 10px; border: 1px solid #ddd;">${formattedSurfaceHtml}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">${safeSurface || 'Non renseignée'} m²</td>
         </tr>
         <tr>
           <td style="padding: 10px; border: 1px solid #ddd;"><strong>Téléphone</strong></td>
@@ -169,8 +144,8 @@ serve(async (req) => {
         Messages: [
           {
             From: {
-              Email: 'noreply@goudronnage-occitanie.fr',
-              Name: 'Site Web Goudronnage'
+              Email: FROM_EMAIL,
+              Name: FROM_NAME
             },
             To: [
               {
@@ -178,17 +153,9 @@ serve(async (req) => {
                 Name: 'Goudronnage Occitanie'
               }
             ],
-            Subject: `🚧 Nouvelle demande de devis - ${surfaceValue || '?'} m²`,
+            Subject: `🚧 Nouvelle demande de devis - ${surface || '?'} m²`,
             HTMLPart: emailContent,
-            TextPart: `Nouvelle demande de devis\nSurface: ${formattedSurfaceText}\nTéléphone: ${telephoneValue}`,
-            ...(emailValue
-              ? {
-                  ReplyTo: {
-                    Email: emailValue,
-                    Name: replyToName || emailValue
-                  }
-                }
-              : {})
+            TextPart: `Nouvelle demande de devis\nSurface: ${surface || 'Non renseignée'} m²\nTéléphone: ${telephone}`
           }
         ]
       })
@@ -196,12 +163,9 @@ serve(async (req) => {
 
     const result = await response.json()
 
-    const messageResult = Array.isArray(result?.Messages) ? result.Messages[0] : null
-
-    if (!response.ok || !messageResult || messageResult.Status !== 'success') {
-      const errorDetails = messageResult?.Errors?.map((err: { ErrorMessage?: string }) => err.ErrorMessage).join(' | ')
+    if (!response.ok) {
       console.error('Erreur Mailjet:', result)
-      throw new Error(errorDetails || 'Erreur lors de l\'envoi de l\'email')
+      throw new Error('Erreur lors de l\'envoi de l\'email')
     }
 
     return new Response(
@@ -211,9 +175,8 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Erreur:', error)
-    const errorMessage = error instanceof Error ? error.message : 'Erreur inattendue'
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
