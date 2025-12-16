@@ -235,7 +235,7 @@ const handleSubmit = async () => {
               <div>
                 <h3 class="font-bold text-white mb-1">Par téléphone</h3>
                 <a href="tel:0661628981" class="text-amber-400 hover:text-amber-300 text-lg font-medium transition">
-                  06 61 62 89 81 / 06 46 75 19 15
+                  06 61 62 89 81
                 </a>
                 <p class="text-gray-500 text-sm mt-1">Du lundi au samedi</p>
               </div>

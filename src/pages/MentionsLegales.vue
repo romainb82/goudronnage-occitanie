@@ -19,7 +19,7 @@
             <p><strong class="text-white">Goudronnage Occitanie</strong></p>
             <p>251 chemin Ernest Laplace</p>
             <p>82000 Montauban</p>
-            <p>Téléphone : <a href="tel:0661628981" class="text-amber-400 hover:text-amber-300">06 61 62 89 81 / 06 46 75 19 15</a></p>
+            <p>Téléphone : <a href="tel:0661628981" class="text-amber-400 hover:text-amber-300">06 61 62 89 81</a></p>
             <p>Email : <a href="mailto:goudronnageoccitanie.82@gmail.com" class="text-amber-400 hover:text-amber-300">goudronnageoccitanie.82@gmail.com</a></p>
           </div>
         </section>
