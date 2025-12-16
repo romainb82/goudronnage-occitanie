@@ -167,7 +167,7 @@ const handleSubmit = async () => {
                   v-model="form.telephone"
                   type="tel" 
                   id="telephone"
-                  placeholder="06 12 34 56 78"
+                  placeholder="06 12 34 56 78 "
                   class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 rounded-xl p-4 text-base focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition"
                   required
                 >
@@ -235,7 +235,7 @@ const handleSubmit = async () => {
               <div>
                 <h3 class="font-bold text-white mb-1">Par téléphone</h3>
                 <a href="tel:0661628981" class="text-amber-400 hover:text-amber-300 text-lg font-medium transition">
-                  06 61 62 89 81
+                  06 61 62 89 81 / 06 46 75 19 15
                 </a>
                 <p class="text-gray-500 text-sm mt-1">Du lundi au samedi</p>
               </div>

@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 const realisations = [
@@ -28,6 +29,16 @@ const realisations = [
     alt: 'Finition gravillonnée cour habitation Montauban'
   }
 ]
+
+const selectedRealisation = ref(null)
+
+const openRealisation = (realisation) => {
+  selectedRealisation.value = realisation
+}
+
+const closeRealisation = () => {
+  selectedRealisation.value = null
+}
 
 </script>
 
@@ -99,7 +110,11 @@ const realisations = [
         <article 
           v-for="(realisation, index) in realisations" 
           :key="index"
-          class="group relative overflow-hidden rounded-2xl aspect-[4/3] glass-panel"
+          class="group relative overflow-hidden rounded-2xl aspect-[4/3] glass-panel cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-[#0b0b0f]"
+          role="button"
+          tabindex="0"
+          @click="openRealisation(realisation)"
+          @keydown.enter.prevent="openRealisation(realisation)"
         >
           <img 
             :src="realisation.image" 
@@ -130,6 +145,38 @@ const realisations = [
       </div>
     </div>
   </section>
+  
+  <!-- Lightbox -->
+  <div 
+    v-if="selectedRealisation"
+    class="lightbox-overlay"
+    @click.self="closeRealisation"
+    @keydown.escape.prevent="closeRealisation"
+    tabindex="-1"
+    aria-modal="true"
+    role="dialog"
+  >
+    <div class="lightbox-content">
+      <button 
+        class="lightbox-close"
+        type="button"
+        @click="closeRealisation"
+        aria-label="Fermer la photo"
+      >
+        ✕
+      </button>
+      <img 
+        :src="selectedRealisation.image"
+        :alt="selectedRealisation.alt"
+        class="lightbox-image"
+        loading="lazy"
+      >
+      <div class="lightbox-caption">
+        <h3>{{ selectedRealisation.title }}</h3>
+        <p>{{ selectedRealisation.alt }}</p>
+      </div>
+    </div>
+  </div>
 
   <!-- Zone d'intervention -->
   <section class="px-4 sm:px-6 pb-20 sm:pb-32" aria-labelledby="zone-title">
@@ -226,10 +273,112 @@ const realisations = [
             href="tel:0661628981" 
             class="bg-white/20 text-black hover:bg-white/30 font-bold text-base py-4 px-8 rounded-xl transition duration-300"
           >
-            📞 06 61 62 89 81
+            📞 06 61 62 89 81  / 06 46 75 19 15
           </a>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: radial-gradient(circle at top, rgba(245, 158, 11, 0.25), rgba(0, 0, 0, 0.95));
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.25s ease;
+}
+
+.lightbox-content {
+  position: relative;
+  width: min(95vw, 1000px);
+  background: rgba(7, 7, 10, 0.92);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.7);
+  padding: clamp(1rem, 2vw, 2rem);
+  animation: slideUp 0.35s ease;
+}
+
+.lightbox-image {
+  width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  background: #050505;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: clamp(-18px, -4vw, -12px);
+  right: clamp(-18px, -4vw, -12px);
+  width: clamp(46px, 6vw, 56px);
+  height: clamp(46px, 6vw, 56px);
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 0.95));
+  color: #fff;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.lightbox-close:hover {
+  transform: scale(1.12);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+}
+
+.lightbox-close::after {
+  font-size: inherit;
+  line-height: 1;
+}
+
+.lightbox-caption {
+  margin-top: 1rem;
+  text-align: center;
+  color: #e5e7eb;
+}
+
+.lightbox-caption h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.lightbox-caption p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>

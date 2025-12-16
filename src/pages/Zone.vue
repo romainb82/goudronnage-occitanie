@@ -69,27 +69,24 @@ onMounted(async () => {
     weight: 2
   }).addTo(map)
 
-  // Marqueurs pour les villes
+  // Marqueurs pour les villes + libellés permanents
   villes.forEach(ville => {
-    const icon = window.L.divIcon({
-      className: 'custom-marker',
-      html: `
-        <div style="
-          background: ${ville.principal ? '#f59e0b' : 'rgba(255,255,255,0.9)'};
-          color: ${ville.principal ? '#000' : '#333'};
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 11px;
-          font-weight: ${ville.principal ? '700' : '500'};
-          white-space: nowrap;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        ">${ville.nom}</div>
-      `,
-      iconSize: [0, 0],
-      iconAnchor: [0, 0]
-    })
+    const marker = window.L.circleMarker([ville.lat, ville.lng], {
+      radius: ville.principal ? 8 : 6,
+      color: ville.principal ? '#f59e0b' : '#ffffff',
+      fillColor: ville.principal ? '#f59e0b' : '#ffffff',
+      fillOpacity: ville.principal ? 1 : 0.85,
+      weight: ville.principal ? 3 : 2
+    }).addTo(map)
 
-    window.L.marker([ville.lat, ville.lng], { icon }).addTo(map)
+    marker
+      .bindTooltip(ville.nom, {
+        permanent: true,
+        direction: 'top',
+        offset: [0, -12],
+        className: `city-tooltip ${ville.principal ? 'city-tooltip--main' : ''}`
+      })
+      .openTooltip()
   })
 
   // Marqueur principal Montauban
@@ -276,5 +273,22 @@ onMounted(async () => {
 
 :deep(.leaflet-control-attribution a) {
   color: #888 !important;
+}
+
+:deep(.city-tooltip) {
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f2937;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+:deep(.city-tooltip--main) {
+  background: #f59e0b;
+  color: #0f172a;
+  border-color: rgba(245, 158, 11, 0.8);
 }
 </style>
