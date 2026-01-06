@@ -72,7 +72,7 @@ onUnmounted(() => {
         </button>
       </div>
 
-      <!-- Mobile Menu -->
+      <!-- Mobile Menu (CORRIGÉ - ajout de Nos services) -->
       <div 
         v-if="isMobileMenuOpen"
         class="md:hidden glass-panel rounded-2xl mt-2 p-4 shadow-2xl"
@@ -83,7 +83,14 @@ onUnmounted(() => {
             class="text-gray-300 hover:text-white transition py-2"
             @click="closeMobileMenu"
           >
-            À propos
+            Accueil
+          </RouterLink>
+          <RouterLink 
+            to="/services" 
+            class="text-gray-300 hover:text-white transition py-2"
+            @click="closeMobileMenu"
+          >
+            Nos services
           </RouterLink>
           <RouterLink 
             to="/zone" 
