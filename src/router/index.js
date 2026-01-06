@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Zone from '../pages/Zone.vue'
+import Services from '../pages/Services.vue'
 import Contact from '../pages/Contact.vue'
 import MentionsLegales from '../pages/MentionsLegales.vue'
 
@@ -20,6 +21,16 @@ const routes = [
       title: 'Goudronnage Occitanie | Gravillonnage & Enrobé à Montauban (82)',
       description: 'Goudronnage Occitanie : spécialiste du goudronnage, gravillonnage et enrobé pour cours, allées et parkings à Montauban et en Occitanie. Devis gratuit ☎ 06 61 62 89 81',
       canonical: '/'
+    }
+  },
+  {
+    path: '/services',
+    name: 'services',
+    component: Services,
+    meta: {
+      title: 'Nos Services de Goudronnage et Gravillonnage | Goudronnage Occitanie',
+      description: "Découvrez nos services de goudronnage, gravillonnage, aménagement de cours et allées, création de parkings à Montauban et en Occitanie. Devis gratuit.",
+      canonical: '/services'
     }
   },
   {

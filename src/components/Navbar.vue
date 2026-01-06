@@ -43,7 +43,8 @@ onUnmounted(() => {
         
         <!-- Navigation Desktop -->
         <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
-          <RouterLink to="/" class="hover:text-white transition" active-class="text-white">À propos</RouterLink>
+          <RouterLink to="/" class="hover:text-white transition" active-class="text-white">Accueil</RouterLink>
+          <RouterLink to="/services" class="hover:text-white transition" active-class="text-white">Nos services</RouterLink>
           <RouterLink to="/zone" class="hover:text-white transition" active-class="text-white">Zone d'intervention</RouterLink>
           <RouterLink to="/contact" class="hover:text-white transition" active-class="text-white">Nous contacter</RouterLink>
         </div>

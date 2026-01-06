@@ -24,6 +24,7 @@ const currentYear = new Date().getFullYear()
           <h3 class="font-bold text-white text-lg mb-4">Navigation</h3>
           <nav class="flex flex-col gap-2">
             <RouterLink to="/" class="text-gray-400 hover:text-white transition text-sm">À propos</RouterLink>
+            <RouterLink to="/services" class="text-gray-400 hover:text-white transition text-sm">Nos services</RouterLink>
             <RouterLink to="/zone" class="text-gray-400 hover:text-white transition text-sm">Zone d'intervention</RouterLink>
             <RouterLink to="/contact" class="text-gray-400 hover:text-white transition text-sm">Nous contacter</RouterLink>
             <RouterLink to="/mentions-legales" class="text-gray-400 hover:text-white transition text-sm">Mentions légales</RouterLink>
