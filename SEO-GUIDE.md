@@ -40,7 +40,7 @@
 Crée une image `og-image.jpg` de **1200x630 pixels** avec :
 - Le logo
 - "Goudronnage Occitanie"
-- "Gravillonnage - Enrobé - Allées"
+- "Gravillonnage - Allées"
 - Une photo de réalisation en fond
 
 **Outils gratuits :**
@@ -119,7 +119,6 @@ Fichiers à modifier :
 ### Principaux (forte intention)
 - goudronnage montauban
 - gravillonnage montauban
-- enrobé montauban
 - goudronnage 82
 - goudronnage tarn et garonne
 

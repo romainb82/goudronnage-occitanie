@@ -356,7 +356,7 @@ const processus = [
             <span class="text-amber-500 group-open:rotate-45 transition-transform">+</span>
           </summary>
           <div class="px-6 pb-6 text-gray-400">
-            <p>Le <strong class="text-white">goudronnage</strong> (ou enrobé) offre une surface lisse, noire et très
+            <p>Le <strong class="text-white">goudronnage</strong> offre une surface lisse, noire et très
               résistante, idéale pour les zones à fort passage. Le <strong class="text-white">gravillonnage</strong>
               (émulsion + gravillons) donne un aspect plus naturel et drainant, avec un coût généralement inférieur.
               Nous vous conseillons la solution la plus adaptée selon votre usage et votre budget.</p>
